@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+		 xmlns:beans="http://www.springframework.org/schema/beans"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<beans:bean id="webexpressionHandler" class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+    <http use-expressions="true">
+        <intercept-url pattern="/user/**" access="hasRole('ROLE_USER')" />
+        <form-login login-page="/login" 
+        			authentication-failure-url="/AuthenticationError" 
+        			default-target-url="/user/home" 
+        			login-processing-url="/j_spring_security_check"
+        			password-parameter="j_password"
+        			username-parameter="j_username"/>
+        <logout logout-success-url="/" />
+        <access-denied-handler error-page="/403" />
+        <csrf disabled="true"/>
+    </http>
+    
+    <beans:bean id="customAuthentationProvider" class="com.webapp.tokenbasedauthentication.other.CustomAuthenticationProvider" >
+        <beans:constructor-arg ref="sessionFactory" />
+    </beans:bean>
+    
+    <authentication-manager  alias="authenticationManager">
+        <authentication-provider ref="customAuthentationProvider" />
+    </authentication-manager>
+</beans:beans>
+
