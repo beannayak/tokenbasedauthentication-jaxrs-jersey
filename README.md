@@ -1,1 +1,1 @@
-Simple token based authentication jaxRs Jersey
+Simple token based authentication Jersey jax-rs implementation
